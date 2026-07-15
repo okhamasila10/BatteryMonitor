@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ref, set, remove } from "firebase/database";
+import { onValue, ref, remove, set } from "firebase/database";
 import { db } from "./firebase.js";
 import Sidebar from "./Sidebar.jsx";
 import DataLogPage from "./pages/DataLogPage.jsx";
@@ -82,10 +82,23 @@ function App() {
   );
   const [batteryId, setBatteryId] = useState("BAT-001");
   const [batteryConfirmed, setBatteryConfirmed] = useState(false);
+  const [remoteActiveId, setRemoteActiveId] = useState("");
 
-  const effectiveId = batteries.includes(batteryId)
+  useEffect(() => {
+    const activeRef = ref(db, "esp32/active_id");
+    return onValue(activeRef, (snap) => {
+      const id = String(snap.val() ?? "").trim().toUpperCase();
+      setRemoteActiveId(id);
+    });
+  }, []);
+
+  const effectiveId = batteryConfirmed && batteries.includes(batteryId)
     ? batteryId
-    : (batteries[0] ?? batteryId);
+    : batteries.includes(remoteActiveId)
+      ? remoteActiveId
+      : batteries.includes(batteryId)
+        ? batteryId
+        : (batteries[0] ?? batteryId);
 
   const {
     live,
