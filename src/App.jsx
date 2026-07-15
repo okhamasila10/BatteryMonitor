@@ -334,8 +334,10 @@ function App() {
   const sohReady = cycles.length > 0;
   const sohNow = sohReady ? cycles[cycles.length - 1].soh : 0;
   const sohInitial = sohReady ? cycles[0].soh : 0;
-  const capacityInitial = cycles[0]?.capacity ?? 0;
-  const capacityNow = cycles[cycles.length - 1]?.capacity ?? 0;
+  const validCapacityCycles = cycles.filter((c) => c.capacity > 0);
+  const capacityInitial = validCapacityCycles[0]?.capacity ?? 0;
+  const capacityNow =
+    validCapacityCycles[validCapacityCycles.length - 1]?.capacity ?? 0;
   const degradation = sohReady ? Math.max(0, sohInitial - sohNow) : 0;
 
   const windowMs = useMemo(() => {
