@@ -117,7 +117,6 @@ function App() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editDraft, setEditDraft] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showPickModal, setShowPickModal] = useState(false);
   const [showNeedBatteryModal, setShowNeedBatteryModal] = useState(false);
 
   // Battery power / mode control
@@ -491,12 +490,6 @@ function App() {
       onClick: () => { setAddDraft(""); setAddError(""); setShowAddModal(true); setShowBatteryMenu(false); },
     },
     {
-      label: "Pilih Battery Aktif",
-      icon: "M9 11.24V7.5a2.5 2.5 0 015 0v3.74c1.21-.81 2-2.18 2-3.74 0-2.49-2.01-4.5-4.5-4.5S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z",
-      color: "text-sky-600",
-      onClick: () => { setShowPickModal(true); setShowBatteryMenu(false); },
-    },
-    {
       label: "Edit Battery",
       icon: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
       color: "text-violet-600",
@@ -721,46 +714,6 @@ function App() {
         </Modal>
       )}
 
-      {/* ── Modal: Pilih Battery Aktif ────────────────────────────────────── */}
-      {showPickModal && (
-        <Modal title="Pilih Battery Aktif" onClose={() => setShowPickModal(false)}>
-          {batteries.length === 0 ? (
-            <p className="text-sm text-slate-500">Belum ada battery. Tambah battery baru terlebih dahulu.</p>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {batteries.map((id) => (
-                <button
-                  key={id}
-                  onClick={() => {
-                    setBatteryId(id);
-                    setBatteryConfirmed(true);
-                    setShowPickModal(false);
-                  }}
-                  className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold ring-1 transition ${
-                    id === effectiveId
-                      ? "bg-teal-50 text-teal-700 ring-teal-200"
-                      : "bg-slate-50 text-slate-700 ring-slate-200 hover:bg-slate-100"
-                  }`}
-                >
-                  {id}
-                  {id === effectiveId && (
-                    <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-bold text-teal-600">
-                      Aktif
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-          <button
-            onClick={() => { setShowPickModal(false); setAddDraft(""); setAddError(""); setShowAddModal(true); }}
-            className="mt-4 w-full rounded-xl border-2 border-dashed border-slate-200 py-2.5 text-sm font-semibold text-slate-500 hover:border-teal-400 hover:text-teal-600"
-          >
-            + Tambah Battery Baru
-          </button>
-        </Modal>
-      )}
-
       {/* ── Modal: Edit Battery ───────────────────────────────────────────── */}
       {showEditModal && (
         <Modal title="Edit Battery" onClose={() => setShowEditModal(false)}>
@@ -830,7 +783,7 @@ function App() {
           </p>
           <div className="flex gap-2">
             <button
-              onClick={() => { setShowNeedBatteryModal(false); setShowPickModal(true); }}
+              onClick={() => { setShowNeedBatteryModal(false); setShowBatterySelect(true); }}
               className="flex-1 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-500 py-2 text-sm font-bold text-white shadow"
             >
               Pilih Battery
