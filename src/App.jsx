@@ -88,7 +88,6 @@ function App() {
     : (batteries[0] ?? batteryId);
 
   const {
-    info,
     live,
     telemetry,
     cycles: fbCycles,
@@ -323,28 +322,9 @@ function App() {
   const sohReady = cycles.length > 0;
   const sohNow = sohReady ? cycles[cycles.length - 1].soh : 0;
   const sohInitial = sohReady ? cycles[0].soh : 0;
-  const cycleNow = Number(
-    live?.cycle ?? (cycles.length ? cycles[cycles.length - 1].cycle : 0),
-  );
   const capacityInitial = cycles[0]?.capacity ?? 0;
   const capacityNow = cycles[cycles.length - 1]?.capacity ?? 0;
   const degradation = sohReady ? Math.max(0, sohInitial - sohNow) : 0;
-  const sohInsight = sohReady
-    ? `SOH ${sohNow.toFixed(1)}% setelah ${cycleNow} cycle (turun ${degradation.toFixed(1)}%)`
-    : "SOH akan tersedia setelah 1 cycle penuh selesai.";
-
-  const status = useMemo(() => {
-    if (temp >= 50 || (sohReady && sohNow < 80)) return "Danger";
-    if (temp >= 40 || (sohReady && sohNow < 90)) return "Warning";
-    return "Normal";
-  }, [temp, sohNow, sohReady]);
-
-  const statusStyle =
-    status === "Danger"
-      ? "bg-rose-100 text-rose-700 ring-rose-200"
-      : status === "Warning"
-        ? "bg-amber-100 text-amber-700 ring-amber-200"
-        : "bg-emerald-100 text-emerald-700 ring-emerald-200";
 
   const windowMs = useMemo(() => {
     const v = Number.isFinite(rangeValue) ? rangeValue : 5;
@@ -686,9 +666,6 @@ function App() {
               soh={sohNow}
               sohReady={sohReady}
               soc={soc}
-              status={status}
-              statusStyle={statusStyle}
-              ratedCapacity={Number(info?.rated_capacity_mah) || 0}
               telemetryRows={telemetryRows}
               telemetryChart={telemetryChart}
               delay={delay}

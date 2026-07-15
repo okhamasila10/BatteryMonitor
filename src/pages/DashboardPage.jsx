@@ -91,9 +91,6 @@ export default function DashboardPage({
   soh,
   sohReady,
   soc,
-  status,
-  statusStyle,
-  ratedCapacity,
   telemetryRows,
   telemetryChart,
   delay,
@@ -347,31 +344,6 @@ export default function DashboardPage({
               sub="Estimasi V"
               color="bg-gradient-to-r from-sky-500 to-indigo-400"
             />
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-4">
-            <div className="rounded-2xl bg-slate-50/80 p-4 ring-1 ring-slate-100">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                Kapasitas Nominal
-              </div>
-              <div className="mt-2 text-xl font-bold text-slate-900">
-                {ratedCapacity ? `${ratedCapacity}` : "—"}
-                {ratedCapacity ? (
-                  <span className="ml-1 text-xs text-slate-400">mAh</span>
-                ) : null}
-              </div>
-            </div>
-            <div className="rounded-2xl bg-slate-50/80 p-4 ring-1 ring-slate-100">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                Status
-              </div>
-              <div className="mt-2">
-                <span
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ring-1 ${statusStyle}`}
-                >
-                  {status}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
